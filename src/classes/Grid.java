@@ -7,6 +7,7 @@ import javax.swing.*;
 public class Grid {
 	Player player1;
 	Player player2;
+	Player currentPlayer=player1;
 
 	int rows = 3;
 	int columns = 3;
@@ -51,6 +52,65 @@ public class Grid {
 				panel.add(buttonGrid[row][column]);
 			}
 		}
+	}
+
+	public boolean isWin(JButton[] line){
+		String rowToken = null;
+		boolean foundWin = true;
+		for(JButton button: line){
+			if(rowToken == null){
+				rowToken = button.getText();
+			}else if(button.getText().equals("")){
+				return false;
+			}else if(!(button.getText()).equals(rowToken)){
+				return false;
+			}
+		}
+		return foundWin;
+	}
+
+	public boolean isHorizontalWin(){
+		boolean ishorizontalWin = false;
+		for(int row=0; row<buttonGrid.length; row++){
+			if(isWin(buttonGrid[row])){
+				return true;
+			}
+		}
+		return ishorizontalWin;
+	}
+
+	public boolean isVerticalWin(){
+		boolean isVerticalWin = false;
+		JButton[] column = null;
+		for(int col=0; col<buttonGrid[col].length; col++){
+			column = new JButton[rows];
+			for (int row = 0; row < buttonGrid[row].length; row++) {
+				column[row] = buttonGrid[row][col];
+			}
+			if(isWin(column)){
+				return true;
+			}
+		}
+		return isVerticalWin;
+	}
+
+	public boolean isDiagonalWin(){
+		JButton[] diagonal = new JButton[columns];
+		boolean isDiagonalWin = false;
+		for(int row=0; row<buttonGrid.length; row++) {
+			diagonal[row] = buttonGrid[row][row];
+		}
+		if(isWin(diagonal)){
+			return true;
+		}else{
+			for (int row = 0; row < buttonGrid.length; row++) {
+				diagonal[row] = buttonGrid[row][(buttonGrid.length-1)-row];
+			}
+			if(isWin(diagonal)) {
+				return true;
+			}
+		}
+		return isDiagonalWin;
 	}
 
 	public void initialiseStringGrid() {
