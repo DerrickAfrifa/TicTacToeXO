@@ -8,8 +8,6 @@ import javax.swing.JButton;
 
 public class XOButton extends JButton {	
 	Grid g;
-	int status = 0;
-	static int clickCount=0;
 	static int id = 0;
 	int buttonId;
 	int row = 0;
@@ -28,30 +26,20 @@ public class XOButton extends JButton {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				if(clickCount == 0){
-					if(isEnabled()){
-						setText(g.player1.getToken());
-						setEnabled(false);
-						g.updateStringGrid(buttonId, g.player1.getToken());
-						g.checkIfWinningMove(buttonId, g.player1.getToken());
-						clickCount++;
-						clickCount %= 2;
+				if(isEnabled()){
+					setText(g.currentPlayer.getToken());
+					setEnabled(false);
+
+					if(g.isHorizontalWin()||g.isVerticalWin()||g.isDiagonalWin()){
+						g.winningMove(g.currentPlayer.getToken());
 					}
-					//setEnabled(false);
-					
-				}else{
-					if(isEnabled()){					
-						setText(g.player2.getToken());
-						setEnabled(false);
-						g.updateStringGrid(buttonId, g.player2.getToken());
-						g.checkIfWinningMove(buttonId, g.player2.getToken());
-						clickCount++;
-						clickCount %= 2;
+
+					if(g.currentPlayer.equals(g.player1)){
+						g.currentPlayer = g.player2;
+					}else{
+						g.currentPlayer = g.player1;
 					}
-					//setEnabled(false);
 				}
-				
 			}
 		});
 	}
